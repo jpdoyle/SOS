@@ -158,6 +158,7 @@ fi
 if test "$enable_picky" = "yes" -a "$GCC" = "yes" ; then
   CFLAGS="$CFLAGS -Wall -Wno-long-long -Wmissing-prototypes -Wstrict-prototypes -Wcomment -pedantic"
 fi
+AX_CXX_COMPILE_STDCXX_11(ext,optional)
 
 AC_CACHE_SAVE
 
@@ -408,6 +409,7 @@ fi
 echo ""
 echo "Compilers:"
 echo "  C:              $CC"
+echo "  C++:            $CXX"
 echo "  Fortran:        $FORT"
 echo ""
 echo "Transports:"
