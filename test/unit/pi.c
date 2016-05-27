@@ -55,7 +55,7 @@ main(int argc, char* argv[], char *envp[])
     */
     me = shmem_my_pe();
 
-    srand(1);
+    srand(1+me);
 
     for(total = 0; total < NUM_POINTS; ++total) {
         double x,y;
