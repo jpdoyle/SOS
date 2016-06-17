@@ -5,6 +5,8 @@ compiler:
     - gcc
 env:
     global:
+        # Encrypted coverity token
+        - secure: "U9cdP2cOhGdZ8XytsS9foqwZ+6Ro8xkIXaazihf+cixZWX6odIxnxP3BidGs6VNg6nuDQCbxKLZgGLIAphz+u+R/8vQryg6yLjNtwu4E+jkkyuGPbd3lKs0+gu+YlrDJdXjhxcWLYb52oOb2XFbxYG8ppPEUjWFsqvokR9+dH+Jp1Br0DXhvEX/a/gKbIX0otadRA3Tdk/l2qETdmhu+FABBcZKNJo3iW7Iy3WI7iNflzPjzUTUNkWVtT4uaHseEX7/fK8uKxvV0KqRz+sR4TBOwYlfPQ+XHQZr0Ze9elKaJf0pX7n7Yxa5bj6UVVC8fVQG7qxQe83ksiEjdDUaUd72/xvMlwy0hq00Qj5tmxkImUf86i/3P2tRl6V4fxCmrLHO3O4HM/q3Sh7ivS8uScBLRV+t5L6UeGiJQdbtIDB2QiguqQBETi/z40qpO6Mu9zff4EQcuf+0YPF/4R+ZJxUpwadjRAV7FCuuVzIB9cXwHqNIQLAPHcNpnmDxCCofHrojcEVBGneFIKYKDPSleKBO7gEY9Ffks0P53qO1g0Sn8KUcfCqNSg+BO3ieHNZsXZWWVhibiRzaZs0Oio/ezy6GnVfeTL4temidS8DQzBDlq76OCzAMPdhA9GJyUdMZKiBrY4ipeagw2/WNav3nqW/CWqXcOAhSoMSLTMWUizXo="
         - TRAVIS_PAR_MAKE="-j 4"
         - SOS_GLOBAL_BUILD_OPTS="--disable-long-fortran-header --enable-picky --enable-pmi-simple FCFLAGS=-fcray-pointer"
         - PTL_IFACE_NAME=venet0
@@ -28,6 +30,12 @@ addons:
     apt:
         packages:
             - gfortran
+    coverity_scan:
+        project:
+            name: "jpdoyle/SOS"
+            description: "Build submitted via Travis CI"
+            notification_email: joethedoyle@gmail.com
+            branch_pattern: coverity_scan
 
 before_install:
     ## Set up the environment
