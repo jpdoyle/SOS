@@ -83,7 +83,8 @@ typedef struct shmem_transport_cntr_ep_t {
 
 typedef struct shmem_transport_dom_t {
   int id;
-  struct fid_stx* stx;
+  struct fid_ep* ep;
+  struct fid_ep* rx_ep;
   shmem_internal_mutex_t lock;
   void (*take_lock)(struct shmem_transport_dom_t**);
   void (*release_lock)(struct shmem_transport_dom_t**);
@@ -95,7 +96,6 @@ typedef struct shmem_transport_dom_t {
    * Perhaps there should be one per endpoint?
    */
   struct fid_cq* cq;
-  struct fid_ep* cq_ep;
   size_t num_active_contexts;
   /* Has shmem_domain_destroy been called on this? */
   int freed;

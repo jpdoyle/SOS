@@ -243,6 +243,7 @@ shmem_transport_ofi_put_large(void *target, const void *source,
           key, NULL);
     } while (try_again(ret, &polled, ctx));
 
+    shmem_internal_assert(ret == 0);
     ctx->endpoint.pending_count++;
 
     frag_source += frag_len;
@@ -311,6 +312,7 @@ shmem_transport_get(void *target, const void *source, size_t len,
           NULL);
     } while (try_again(ret, &polled, ctx));
 
+    shmem_internal_assert(ret == 0);
     ctx->endpoint.pending_count++;
   } else {
     uint8_t *frag_target = (uint8_t *) target;
@@ -329,7 +331,8 @@ shmem_transport_get(void *target, const void *source, size_t len,
             key, NULL);
       } while (try_again(ret, &polled, ctx));
 
-    ctx->endpoint.pending_count++;
+      shmem_internal_assert(ret == 0);
+      ctx->endpoint.pending_count++;
 
       frag_source += frag_len;
       frag_target += frag_len;
@@ -373,6 +376,7 @@ shmem_transport_swap(void *target, const void *source, void *dest,
         NULL);
   } while(try_again(ret, &polled, ctx));
 
+  shmem_internal_assert(ret == 0);
   ctx->endpoint.pending_count++;
 
   ctx->release_lock((shmem_transport_dom_t**)ctx);
@@ -418,6 +422,7 @@ shmem_transport_cswap(void *target, const void *source, void *dest,
         NULL);
   } while(try_again(ret, &polled, ctx));
 
+  shmem_internal_assert(ret == 0);
   ctx->endpoint.pending_count++;
 
   ctx->release_lock((shmem_transport_dom_t**)ctx);
@@ -464,6 +469,7 @@ shmem_transport_mswap(void *target, const void *source, void *dest,
   } while(try_again(ret, &polled, ctx));
 
 
+  shmem_internal_assert(ret == 0);
   ctx->endpoint.pending_count++;
 
   ctx->release_lock((shmem_transport_dom_t**)ctx);
@@ -502,6 +508,7 @@ shmem_transport_atomic_small(void *target, const void *source,
         op);
   } while(try_again(ret, &polled, ctx));
 
+  shmem_internal_assert(ret == 0);
   ctx->endpoint.pending_count++;
 
   ctx->release_lock((shmem_transport_dom_t**)ctx);
@@ -540,6 +547,7 @@ shmem_transport_atomic_set(void *target, const void *source,
         FI_ATOMIC_WRITE);
   } while (try_again(ret, &polled, ctx));
 
+  shmem_internal_assert(ret == 0);
   ctx->endpoint.pending_count++;
 
   ctx->release_lock((shmem_transport_dom_t**)ctx);
@@ -583,6 +591,7 @@ shmem_transport_atomic_fetch(void *target, const void *source,
   } while (try_again(ret, &polled, ctx));
 
 
+  shmem_internal_assert(ret == 0);
   ctx->endpoint.pending_count++;
 
   ctx->release_lock((shmem_transport_dom_t**)ctx);
@@ -625,6 +634,7 @@ shmem_transport_atomic_nb(void *target, const void *source,
     } while(try_again(ret, &polled, ctx));
 
 
+    shmem_internal_assert(ret == 0);
     ctx->endpoint.pending_count++;
 
   } else {
@@ -651,6 +661,7 @@ shmem_transport_atomic_nb(void *target, const void *source,
             NULL);
       } while(try_again(ret, &polled, ctx));
 
+      shmem_internal_assert(ret == 0);
       ctx->endpoint.pending_count++;
       sent += chunksize;
     }
@@ -696,6 +707,7 @@ shmem_transport_fetch_atomic(void *target, const void *source, void *dest,
   } while(try_again(ret, &polled, ctx));
 
 
+  shmem_internal_assert(ret == 0);
   ctx->endpoint.pending_count++;
 
   ctx->release_lock((shmem_transport_dom_t**)ctx);
