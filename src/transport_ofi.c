@@ -350,9 +350,9 @@ int shmemx_domain_create(int thread_level, int num_domains,
     }
 
     /* TODO: fill tx_attr */
-    ret = fi_stx_context(shmem_transport_ofi_domainfd, NULL,
-        &dom->stx, NULL);
-    IF_OFI_ERR_RETURN(ret,"stx context initialization failed");
+    ret = fi_srx_context(shmem_transport_ofi_domainfd, NULL,
+        &dom->srx, NULL);
+    IF_OFI_ERR_RETURN(ret,"srx context initialization failed");
 
     struct fi_cq_attr   cq_attr = {0};
     /* event type for CQ,only context stored/reported */
@@ -402,8 +402,8 @@ void shmem_transport_domain_destroy(shmem_transport_dom_t* dom)
   /*       fi_strerror(errno)); */
   /* } */
 
-  if(fi_close(&dom->stx->fid)) {
-    OFI_ERRMSG("Domain STX close failed (%s)", fi_strerror(errno));
+  if(fi_close(&dom->srx->fid)) {
+    OFI_ERRMSG("Domain SRX close failed (%s)", fi_strerror(errno));
   }
 
   dom->release_lock(&dom);
@@ -447,7 +447,7 @@ int shmemx_ctx_create(shmemx_domain_t domain, shmemx_ctx_t *ctx)
   cntr_attr.events   = FI_CNTR_EVENTS_COMP;
 
   struct fabric_info* info = &shmem_ofi_cntr_info;
-  info->p_info->ep_attr->tx_ctx_cnt = FI_SHARED_CONTEXT;
+  info->p_info->ep_attr->tx_ctx_cnt = 1;
   info->p_info->caps = FI_RMA | FI_WRITE | FI_READ | /*SEND ONLY */
                         FI_ATOMICS; /* request atomics capability */
   info->p_info->caps |= FI_REMOTE_WRITE | FI_REMOTE_READ;
@@ -493,8 +493,8 @@ int shmemx_ctx_create(shmemx_domain_t domain, shmemx_ctx_t *ctx)
       info->p_info, &ep->ep, NULL);
   IF_OFI_ERR_RETURN(ret,"epfd creation failed");
 
-  ret = fi_ep_bind(ep->ep, &dom->stx->fid, 0);
-  IF_OFI_ERR_RETURN(ret,"context ep_bind ep -> stx failed");
+  ret = fi_ep_bind(ep->ep, &dom->srx->fid, 0);
+  IF_OFI_ERR_RETURN(ret,"context ep_bind ep -> srx failed");
 
   ret = fi_ep_bind(ep->ep, &ep->counter->fid, FI_READ | FI_WRITE);
   IF_OFI_ERR_RETURN(ret,"ep_bind cntr_ep2cntr failed");
@@ -1145,6 +1145,7 @@ static inline int query_for_fabric(struct fabric_info *info)
 
     hints.domain_attr         = &domain_attr;
     ep_attr.type              = FI_EP_RDM; /* reliable connectionless */
+    ep_attr.rx_ctx_cnt        = FI_SHARED_CONTEXT; /* we only use one receive context */
     hints.fabric_attr	      = &fabric_attr;
     tx_attr.op_flags          = FI_DELIVERY_COMPLETE;
     tx_attr.inject_size       = shmem_transport_ofi_max_buffered_send; /*require provider to support this as a min*/

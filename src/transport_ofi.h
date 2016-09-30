@@ -83,7 +83,7 @@ typedef struct shmem_transport_cntr_ep_t {
 
 typedef struct shmem_transport_dom_t {
   int id;
-  struct fid_stx* stx;
+  struct fid_ep* srx;
   shmem_internal_mutex_t lock;
   void (*take_lock)(struct shmem_transport_dom_t**);
   void (*release_lock)(struct shmem_transport_dom_t**);
